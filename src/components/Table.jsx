@@ -1,3 +1,7 @@
+import { useState } from "react";
+import Pagination from "./Pagination";
+import { LIMIT_PER_PAGE } from "../constants";
+
 const TableHeader = () => {
   return (
     <thead>
@@ -27,13 +31,47 @@ const TableRow = ({ row }) => {
   );
 };
 
-export default function Table({ data }) {
+const TableFooter = ({ children }) => {
+  return (
+    <tfoot>
+      <tr>
+        <td>{children}</td>
+      </tr>
+    </tfoot>
+  );
+};
+
+export default function Table({ data, searchTerm, sortTerm }) {
+  const [currentPage, setCurrentPage] = useState(1);
+  let filteredData = data;
+  searchTerm = searchTerm.trim();
+  if (searchTerm)
+    filteredData = data.filter((el) =>
+      el.Pname.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  if (sortTerm === "asc") filteredData.sort((a, b) => a.Pprice - b.Pprice);
+  if (sortTerm === "dsc") filteredData.sort((a, b) => b.Pprice - a.Pprice);
+
+  let totalRows = filteredData.length;
+  let totalPages = Math.ceil(totalRows / LIMIT_PER_PAGE);
+  function handleNextPage() {
+    if (currentPage === totalPages) return;
+    setCurrentPage((prev) => prev + 1);
+  }
+  function handlePrevPage() {
+    if (currentPage === 1) return;
+    setCurrentPage((prev) => prev - 1);
+  }
+
   return (
     <table>
       <TableHeader />
-      {data.map((row) => (
+      {filteredData.map((row) => (
         <TableRow key={row.id} row={row} />
       ))}
+      <TableFooter>
+        <Pagination onNext={handleNextPage} onPrev={handlePrevPage} />
+      </TableFooter>
     </table>
   );
 }

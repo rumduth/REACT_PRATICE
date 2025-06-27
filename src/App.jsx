@@ -2,12 +2,16 @@ import { useEffect, useState } from "react";
 import { URL } from "./constants/index";
 import Table from "./components/Table";
 import Search from "./components/Search";
+import Sort from "./components/Sort";
 export default function App() {
   const [people, setPeople] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-
-  function handleSearch(val) {
-    setSearchTerm(val);
+  const [sortTerm, setSortTerm] = useState("");
+  function handleSearch(e) {
+    setSearchTerm(e.target.value);
+  }
+  function handleSortBy(e) {
+    setSortTerm(e.target.value);
   }
 
   useEffect(function () {
@@ -20,8 +24,9 @@ export default function App() {
   }, []);
   return (
     <div>
-      <Search onChange={handleSearch} value={searchTerm} />
-      <Table data={people} searchTerm={searchTerm} />
+      <Search onChange={handleSearch} searchTerm={searchTerm} />
+      <Sort sortTerm={sortTerm} onChange={handleSortBy} />
+      <Table data={people} searchTerm={searchTerm} sortTerm={sortTerm} />
     </div>
   );
 }

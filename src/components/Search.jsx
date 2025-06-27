@@ -3,6 +3,7 @@ export default function Search({ onChange, searchTerm }) {
     <div>
       <label htmlFor="search">Search</label>
       <input
+        id="search"
         type="text"
         name="search"
         placeholder="Search by name"
