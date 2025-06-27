@@ -51,7 +51,6 @@ export default function Table({ data, searchTerm, sortTerm }) {
     );
   if (sortTerm === "asc") filteredData.sort((a, b) => a.Pprice - b.Pprice);
   if (sortTerm === "dsc") filteredData.sort((a, b) => b.Pprice - a.Pprice);
-
   let totalRows = filteredData.length;
   let totalPages = Math.ceil(totalRows / LIMIT_PER_PAGE);
   function handleNextPage() {
@@ -62,7 +61,10 @@ export default function Table({ data, searchTerm, sortTerm }) {
     if (currentPage === 1) return;
     setCurrentPage((prev) => prev - 1);
   }
-
+  filteredData = filteredData.slice(
+    (currentPage - 1) * LIMIT_PER_PAGE,
+    Math.min(currentPage * LIMIT_PER_PAGE, totalRows)
+  );
   return (
     <table>
       <TableHeader />
@@ -70,8 +72,16 @@ export default function Table({ data, searchTerm, sortTerm }) {
         <TableRow key={row.id} row={row} />
       ))}
       <TableFooter>
-        <Pagination onNext={handleNextPage} onPrev={handlePrevPage} />
+        <Pagination
+          onNext={handleNextPage}
+          onPrev={handlePrevPage}
+          btnDisabled={[currentPage === 1, currentPage === totalPages]}
+        />
+        <p>
+          Current showing {currentPage} / {totalPages} pages
+        </p>
       </TableFooter>
     </table>
   );
 }
+//31 -> 30 -> min(31,35)

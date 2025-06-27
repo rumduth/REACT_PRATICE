@@ -1,9 +1,13 @@
-export default function Pagination({ onNext, onPrev }) {
+export default function Pagination({ onNext, onPrev, btnDisabled }) {
   return (
     <>
-      <button onClick={onPrev}>Prev</button>
+      <button onClick={onPrev} disabled={btnDisabled[0]}>
+        Prev
+      </button>
       <span> </span>
-      <button onClick={onNext}>Next</button>
+      <button onClick={onNext} disabled={btnDisabled[1]}>
+        Next
+      </button>
     </>
   );
 }
