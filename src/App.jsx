@@ -3,6 +3,7 @@ import { URL } from "./constants/index";
 import Table from "./components/Table";
 import Search from "./components/Search";
 import Sort from "./components/Sort";
+import Form from "./components/Form";
 export default function App() {
   const [people, setPeople] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -13,6 +14,19 @@ export default function App() {
   function handleSortBy(e) {
     setSortTerm(e.target.value);
   }
+  async function handleAddPeople(data) {
+    await fetch(URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    let response = await fetch(URL);
+    let resData = await response.json();
+    setPeople(resData);
+  }
 
   useEffect(function () {
     async function getData() {
@@ -22,11 +36,13 @@ export default function App() {
     }
     getData().then((data) => setPeople(data));
   }, []);
+
   return (
     <div>
       <Search onChange={handleSearch} searchTerm={searchTerm} />
       <Sort sortTerm={sortTerm} onChange={handleSortBy} />
       <Table data={people} searchTerm={searchTerm} sortTerm={sortTerm} />
+      <Form onAdd={handleAddPeople} />
     </div>
   );
 }
