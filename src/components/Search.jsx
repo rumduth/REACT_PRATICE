@@ -1,4 +1,7 @@
-export default function Search({ onChange, searchTerm }) {
+import { useEmployee } from "../context/EmployeeProvider";
+
+export default function Search() {
+  const { searchTerm, handleSearch } = useEmployee();
   return (
     <div>
       <label htmlFor="search">Search</label>
@@ -8,7 +11,7 @@ export default function Search({ onChange, searchTerm }) {
         name="search"
         placeholder="Search by name"
         value={searchTerm}
-        onChange={onChange}
+        onChange={handleSearch}
       />
     </div>
   );

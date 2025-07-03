@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Pagination from "./Pagination";
 import { LIMIT_PER_PAGE } from "../constants";
+import { useEmployee } from "../context/EmployeeProvider";
 
 const TableHeader = () => {
   return (
@@ -41,7 +42,8 @@ const TableFooter = ({ children }) => {
   );
 };
 
-export default function Table({ data, searchTerm, sortTerm }) {
+export default function Table() {
+  let { people: data, searchTerm, sortTerm } = useEmployee();
   const [currentPage, setCurrentPage] = useState(1);
   let filteredData = data;
   searchTerm = searchTerm.trim();

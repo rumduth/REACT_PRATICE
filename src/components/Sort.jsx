@@ -1,6 +1,9 @@
-export default function Sort({ sortTerm, onChange }) {
+import { useEmployee } from "../context/EmployeeProvider";
+
+export default function Sort() {
+  const { sortTerm, handleSortBy } = useEmployee();
   return (
-    <select name="" id="" onChange={onChange} value={sortTerm}>
+    <select name="" id="" onChange={handleSortBy} value={sortTerm}>
       <option value="normal">Normal</option>
       <option value="asc">Price Ascending</option>
       <option value="dsc">Price Descending</option>
