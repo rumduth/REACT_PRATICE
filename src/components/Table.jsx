@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Pagination from "./Pagination";
 import { LIMIT_PER_PAGE } from "../constants";
 
@@ -53,6 +53,14 @@ export default function Table({ data, searchTerm, sortTerm }) {
   if (sortTerm === "dsc") filteredData.sort((a, b) => b.Pprice - a.Pprice);
   let totalRows = filteredData.length;
   let totalPages = Math.ceil(totalRows / LIMIT_PER_PAGE);
+
+  useEffect(
+    function () {
+      setCurrentPage(1);
+    },
+    [searchTerm]
+  );
+
   function handleNextPage() {
     if (currentPage === totalPages) return;
     setCurrentPage((prev) => prev + 1);
@@ -75,7 +83,7 @@ export default function Table({ data, searchTerm, sortTerm }) {
         <Pagination
           onNext={handleNextPage}
           onPrev={handlePrevPage}
-          btnDisabled={[currentPage === 1, currentPage === totalPages]}
+          btnDisabled={[currentPage <= 1, currentPage >= totalPages]}
         />
         <p>
           Current showing {currentPage} / {totalPages} pages
